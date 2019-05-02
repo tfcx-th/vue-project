@@ -7,7 +7,7 @@ const imagPort = 8011;
 
 // 创建API代理服务
 const apiServer = http.createServer((req, res) => {
-  const url = 'http://news-at.zhihu.com/api/4' + req.url;
+  const url = 'http://daily.zhihu.com/api/4' + req.url;
   const options = {
     url: url
   };
