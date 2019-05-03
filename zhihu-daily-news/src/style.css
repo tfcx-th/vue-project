@@ -5,29 +5,26 @@ html, body {
     color: #657180;
     font-size: 16px;
 }
-.daily-menu {
-    width: 150px;
+.daily {
+    bottom: 0px;
+}
+.daily-list {
+    width: 300px; 
     position: fixed;
     top: 0;
     bottom: 0;
+    overflow: scroll;
+    border-right: 1px solid #d7dde4;
+}
+.daily-menu {
+    width: 300px;
+    position: fixed;
+    top: 0;
     left: 0;
     overflow: auto;
     background: #f5f7f9;
+    float: left;
 }
-/* .daily-menu ul {
-    list-style: none;
-}
-.daily-menu ul li a {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    padding: 5px 0;
-    margin: 5px 0;
-    cursor: pointer;
-}
-.daily-menu ul li a:hover, .daily-menu ul li a.on {
-    color: #39f;
-} */
 .daily-menu-item {
     font-size: 18px;
     text-align: center;
@@ -43,14 +40,8 @@ html, body {
 .daily-menu-item.on {
     border-right: 2px solid #39f;
 }
-.daily-list {
-    width: 300px; 
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 150px;
-    overflow: scroll;
-    border-right: 1px solid #d7dde4;
+.daily-menu + div {
+    margin-top: 60px;
 }
 .daily-date {
     text-align: center;
@@ -85,8 +76,10 @@ html, body {
     padding-left: 5px;
 }
 .daily-article {
-    margin-left: 450px;
+    max-height: 200px;
+    margin-left: 350px;
     padding: 20px;
+    bottom: 0px;
 }
 .daily-article-title {
     font-size: 28px;

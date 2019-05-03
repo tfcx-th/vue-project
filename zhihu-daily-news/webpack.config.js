@@ -3,7 +3,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 var config = {
   entry: {
-    main: './main'
+    main: './src/main.js'
   },
   output: {
     path: path.join(__dirname, './dist'),

@@ -9,7 +9,7 @@
 </template>
 <script>
 
-import $ from '../libs/util';
+import $ from '../../libs/util';
 
 export default {
   props: {

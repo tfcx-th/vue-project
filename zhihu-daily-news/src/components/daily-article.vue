@@ -19,7 +19,7 @@
 </template>
 <script>
 
-import $ from '../libs/util';
+import $ from '../../libs/util';
 import Time from '../directives/time';
 
 export default {

@@ -1,11 +1,11 @@
 <template>
   <div class="daily">
-    <div class="daily-menu">
-      <div class="daily-menu-item"
+    <div class="daily-list" ref="list">
+      <div class="daily-menu">
+        <div class="daily-menu-item"
           :class="{ on: type === 'recommend' }"
           @click="handleToRecommend">每日推荐</div>
-    </div>
-    <div class="daily-list" ref="list">
+      </div>
       <template v-if="type === 'recommend'">
         <div v-for="(list, index) in recommendList" :key="index">
           <div class="daily-date">{{ formatDay(list.date) }}</div>
@@ -21,7 +21,7 @@
 </template>
 <script>
 
-import $ from './libs/util';
+import $ from '../libs/util';
 import Item from './components/item.vue';
 import dailyArticle from './components/daily-article.vue';
 
@@ -33,9 +33,7 @@ export default {
   data() {
     return {
       themes: [],
-      showThemes: false,
       type: 'recommend',
-      // themeId: 0,
       recommendList: [],
       list: [],
       dailyTime: $.getTodayTime(),
