@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --open --config webpack.config.js",
+    "dev": "webpack-dev-server --open --history-api-fallback --config webpack.config.js",
     "build": "webpack --mode production --progress --hide-modules --config webpack.prod.config.js"
   },
   "author": "tfcx",
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "vue": "^2.6.10",
-    "vue-router": "^3.0.6"
+    "vue-router": "^2.8.1",
+    "vuex": "^2.5.0"
   }
 }
