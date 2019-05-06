@@ -15,7 +15,7 @@ var config = {
   module: {
     rules: [
       {
-        test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
+        test: /\.(gif|jpg|jpeg|png|woff|svg|eot|ttf)\??.*$/,
         loader: 'url-loader?limit=1024',
       },
       {
