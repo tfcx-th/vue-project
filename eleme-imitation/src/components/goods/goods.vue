@@ -23,12 +23,12 @@
                 <h2 class="name">{{ food.name }}</h2>
                 <p class="desc">{{ food.description }}</p>
                 <div class="extra">
-                  <span>月售{{ food.sellCount }}份</span>
+                  <span class="count">月售{{ food.sellCount }}份</span>
                   <span>好评率{{ food.rating }}%</span>
                 </div>
                 <div class="price">
-                  <span>￥{{ food.price }}</span>
-                  <span v-show="food.oldPrice">￥{{ food.oldPrice }}</span>
+                  <span class="now">￥{{ food.price }}</span>
+                  <span v-show="food.oldPrice" class="old">￥{{ food.oldPrice }}</span>
                 </div>
               </div>
             </li>
@@ -39,6 +39,8 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll';
+
 const ERR_OK = 0;
 
 export default {
@@ -57,10 +59,25 @@ export default {
       response = response.body;
       if (response.errno === ERR_OK) {
         this.goods = response.data;
+        // this.$nextTick(() => {
+        //   this.scroll = new Bscroll(this.$refs.foods-wrapper, {})
+        // });
       }
     });
     this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.menuScroll = new BScroll('.menu-wrapper', {});
+      this.foodScroll = new BScroll('.foods-wrapper', {});
+    })
   }
+  // methods: {
+  //   _initScroll () {
+  //     this.menuScroll = new BScroll(document.querySelector('.menu-wrapper'));
+  //     this.foodsScroll = new BScroll(document.querySelector('foods-wrapper'));
+  //   }
+  // }
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -136,4 +153,24 @@ export default {
           line-height 14px
           font-size 14px
           color rgb(7, 17, 27)
+        .desc, .extra
+          line-height 10px
+          font-size 10px
+          color rgb(147, 153, 159)
+        .desc
+          margin-bottom 8px
+        .extra
+          &.count
+            margin-right 12px
+        .price
+          font-weight 700
+          line-height 24px
+          .now
+            margin-right 8px
+            font-size 14px
+            color red
+          .old
+            text-decoration line-through
+            font-size 10px
+            color rgb(147, 153, 159)
 </style>
