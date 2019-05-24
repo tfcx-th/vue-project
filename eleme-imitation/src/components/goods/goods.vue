@@ -2,11 +2,10 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li v-for="(item, index) in goods"
-             :key="index"
+        <li v-for="(item, index) in goods" :key="index"
             class="menu-item"
            :class="{'current':currentIndex===index}"
-            @click="selectMenu(index, $event)"
+           @click="selectMenu(index, $event)"
               ref="menuList">
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>
@@ -36,7 +35,7 @@
                   <span v-show="food.oldPrice" class="old">￥{{ food.oldPrice }}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" @add="addFood"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -44,9 +43,10 @@
         </li>
       </ul>
     </div>
-    <shopcart :deliveryPrice="seller.deliveryPrice"
-              :min-price="seller.minPrice"
-              :select-foods="selectFoods"></shopcart>
+    <shopcart ref="shopcart"
+              :deliveryPrice="seller.deliveryPrice"
+              :minPrice="seller.minPrice"
+              :selectFoods="selectFoods"></shopcart>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -104,7 +104,6 @@ export default {
         this.$nextTick(() => {
           this._initScroll();
           this._calculateHeight();
-          // this.selectMenu()
         })
       }
     });
@@ -112,12 +111,16 @@ export default {
   },
   methods: {
     selectMenu (index, event) {
-      if (!event._constructed) {
-        return;
-      }
       let foodList = this.$refs.foodList;
       let el = foodList[index];
       this.foodsScroll.scrollToElement(el, 500);
+    },
+    addFood (target) {
+      this._drop(target);
+    },
+    _drop(target) {
+      // 体验优化,异步执行下落动画
+      this.$refs.shopcart.drop(target);
     },
     _initScroll () {
       this.meunScroll = new BScroll(this.$refs.menuWrapper, {
