@@ -49,7 +49,7 @@
               :deliveryPrice="seller.deliveryPrice"
               :minPrice="seller.minPrice"
               :selectFoods="selectFoods"></shopcart>
-    <food :food="selectedFood" ref="food"></food>
+    <food @add="addFood" :food="selectedFood" ref="food"></food>
   </div>
 </template>
 <script type="text/ecmascript-6">

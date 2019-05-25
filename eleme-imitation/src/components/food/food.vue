@@ -19,7 +19,7 @@
             <span v-show="food.oldPrice" class="old">￥{{ food.oldPrice }}</span>
           </div>
           <div class="cartcontrol-wrapper">
-            <cartcontrol :food="food"></cartcontrol>
+            <cartcontrol :food="food" @add="addFood"></cartcontrol>
           </div>
           <transition name="fade">
             <div class="buy"
@@ -69,6 +69,10 @@ export default {
     addFirst (event) {
       this.$emit('add', event.target);
       Vue.set(this.food, 'count', 1);
+    },
+    addFood (target) {
+      console.log(target);
+      this.$emit('add', target);
     }
   }
 }
@@ -156,7 +160,7 @@ export default {
       background rgb(0, 160, 220)
       opacity 1
       &.fade-enter-active, &.fade-leave-active
-        transition all 0.2s
+        transition all 0.3s
       &.fade-enter, &.fade-leave-active
         opacity 0
         z-index -1
