@@ -132,6 +132,7 @@ export default {
     },
     listShow () {
       if (!this.totalCount) {
+        // eslint-disable-next-line
         this.fold = true;
         return false;
       }
@@ -139,6 +140,7 @@ export default {
       if (show) {
         this.$nextTick(() => {
           if (!this.scroll) {
+            // eslint-disable-next-line
             this.scroll = new BScroll(this.$refs.listContent, {
               click: true
             });

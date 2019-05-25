@@ -19,7 +19,9 @@
         <li v-for="(item, index) in goods" :key="index" class="food-list" ref="foodList">
           <h1 class="title">{{ item.name }}</h1>
           <ul>
-            <li v-for="(food, index) in item.foods" :key="index" class="food-item border-1px">
+            <li v-for="(food, index) in item.foods" :key="index"
+                class="food-item border-1px"
+               @click="selectFood(food, $event)">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon">
               </div>
@@ -47,19 +49,22 @@
               :deliveryPrice="seller.deliveryPrice"
               :minPrice="seller.minPrice"
               :selectFoods="selectFoods"></shopcart>
+    <food :food="selectedFood" ref="food"></food>
   </div>
 </template>
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll';
 import shopcart from '../shopcart/shopcart';
 import cartcontrol from '../cartcontrol/cartcontrol';
+import food from '../food/food';
 
 const ERR_OK = 0;
 
 export default {
   components: {
     shopcart,
-    cartcontrol
+    cartcontrol,
+    food
   },
   props: {
     seller: {
@@ -70,7 +75,8 @@ export default {
     return {
       goods: [],
       listHeight: [],
-      scrollY: []
+      scrollY: [],
+      selectedFood: {}
     }
   },
   computed: {
@@ -114,6 +120,10 @@ export default {
       let foodList = this.$refs.foodList;
       let el = foodList[index];
       this.foodsScroll.scrollToElement(el, 500);
+    },
+    selectFood (food, event) {
+      this.selectedFood = food;
+      this.$refs.food.show();
     },
     addFood (target) {
       this._drop(target);
