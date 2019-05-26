@@ -167,11 +167,11 @@ export default {
       text-align center
       .count
         vertical-align top
-        font-size 10px
+        font-size 12px
       .icon-keyboard_arrow_right
         margin-left 2px
         line-height 24px
-        font-size 10px
+        font-size 12px
   .bulletin-wrapper
     position relative
     height 28px
