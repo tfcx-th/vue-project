@@ -70,7 +70,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           data: goods
         })
       }),
-      app.get('/api/rating', function (req, res) {
+      app.get('/api/ratings', function (req, res) {
         // 服务端收到请求后返回给客户端一个json数据
         res.json({
           // 当我们数据正常时，我们通过传递errno字符为0表示数据正常
