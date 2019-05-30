@@ -73,8 +73,6 @@ import split from '../split/split';
 import ratingselect from '../ratingselect/ratingselect';
 import {formatDate} from '../../common/js/date';
 
-const POSITIVE = 0;
-const NEGATIVE = 1;
 const ALL = 2;
 
 export default {
@@ -104,7 +102,7 @@ export default {
     show () {
       this.showFlag = true;
       this.selectType = ALL;
-      this.onlyContent = true;
+      this.onlyContent = false;
       this.$nextTick(() => {
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.food, {

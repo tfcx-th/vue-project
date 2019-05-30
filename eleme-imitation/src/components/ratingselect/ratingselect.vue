@@ -4,17 +4,17 @@
       <span class="block positive"
            :class="{'active':selectType===2}"
            @click="select(2, $event)">{{ desc.all }}
-        <span class="count">47</span>
+        <span class="count">{{ ratings.length }}</span>
       </span>
       <span class="block positive"
            :class="{'active':selectType===0}"
            @click="select(0, $event)">{{ desc.positive }}
-        <span class="count">47</span>
+        <span class="count">{{ positives.length }}</span>
       </span>
       <span class="block negative"
            :class="{'active':selectType===1}"
            @click="select(1, $event)">{{ desc.negative }}
-        <span class="count">47</span>
+        <span class="count">{{ negatives.length }}</span>
       </span>
     </div>
     <div class="switch"
@@ -55,6 +55,14 @@ export default {
           negative: '不满意'
         }
       }
+    }
+  },
+  computed: {
+    positives () {
+      return this.ratings.filter((rating) => (rating.rateType === POSITIVE));
+    },
+    negatives () {
+      return this.ratings.filter((rating) => (rating.rateType === NEGATIVE))
     }
   },
   methods: {
