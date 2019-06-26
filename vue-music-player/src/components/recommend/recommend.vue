@@ -1,39 +1,56 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="(recommend, index) in recommends" :key="index">
-            <a :href="recommend.linkUrl">
-              <img :src="recommend.picUrl">
-            </a>
-          </div>
-        </slider>
+    <scroll ref="scroll" class="recommend-content" :data="recommendsList">
+      <div>
+        <div v-if="recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="(recommend, index) in recommends" :key="index">
+              <a :href="recommend.linkUrl">
+                <img @load="loadImage" :src="recommend.picUrl">
+              </a>
+            </div>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="(item, index) in recommendsList" :key="index" class="item">
+              <div class="icon">
+                <img width="60" height="60" v-lazy="item.imgurl">
+              </div>
+              <div class="text">
+                <p class="desc" v-html="item.dissname"></p>
+                <p class="name" v-html="item.creator.name"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul></ul>
-      </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
-import {getRecommend} from 'api/recommend'
+import {getRecommend, getRecommendList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import Slider from 'base/slider/slider'
+import Scroll from 'base/scroll/scroll'
 
 export default {
   components: {
-    Slider
+    Slider,
+    Scroll
   },
   data () {
     return {
-      recommends: []
+      recommends: [],
+      recommendsList: [],
+      checkLoaded: false
     }
   },
   created () {
-    this._getRecommend()
+    this._getRecommend();
+    this._getRecommendList();
   },
   methods: {
     _getRecommend () {
@@ -42,6 +59,19 @@ export default {
           this.recommends = res.data.slider
         }
       })
+    },
+    _getRecommendList () {
+      getRecommendList().then((res) => {
+        if (res.code === ERR_OK) {
+          this.recommendsList = res.data.list;
+        }
+      })
+    },
+    loadImage () {
+      if (!this.checkLoaded) {
+        this.$refs.scroll.refresh();
+        this.checkLoaded = true;
+      }
     }
   }
 }
@@ -69,4 +99,26 @@ export default {
         text-align center
         font-size $font-size-medium
         color $color-theme
+      .item
+        display flex
+        box-sizing border-box
+        align-items center
+        padding 0 20px 20px 20px
+        .icon
+          flex 0 0 60px
+          width 60px
+          padding-right 20px
+        .text
+          display flex
+          flex-direction column
+          justify-content center
+          flex 1
+          line-height 20px
+          overflow hidden
+          font-size $font-size-medium
+          .desc
+            margin-bottom 10px
+            color $color-text
+          .name
+            color $color-text-d
 </style>

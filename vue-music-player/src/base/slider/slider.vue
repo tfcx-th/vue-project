@@ -44,6 +44,9 @@ export default {
       this.slider.refresh();
     })
   },
+  destroyed () {
+    clearTimeout(this.timer);
+  },
   methods: {
     _setSliderWidth () {
       this.children = this.$refs.sliderGroup.children;
