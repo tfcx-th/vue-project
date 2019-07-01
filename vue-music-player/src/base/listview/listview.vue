@@ -12,7 +12,7 @@
         <h2 class="list-group-title">{{ group.title }}</h2>
         <ul>
           <li v-for="(item, index) in group.items" :key="index" class="list-group-item">
-            <img v-lazy="item.avatar" class="avatar">
+            <img :src="item.avatar" class="avatar">
             <span class="name">{{ item.name }}</span>
           </li>
         </ul>
@@ -30,14 +30,22 @@
         </li>
       </ul>
     </div>
+    <div class="list-fixed" v-show="fixedTitle" ref="fixed">
+      <div class="fixed-title">{{ fixedTitle }}</div>
+    </div>
+    <div v-show="!data.length" class="loading-container">
+      <loading></loading>
+    </div>
   </scroll>
 </template>
 
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
 import {getData} from 'common/js/dom'
 
 const ANCHOR_HEIGHT = 18;
+const TITLE_HEIGHT = 30;
 
 export default {
   props: {
@@ -47,7 +55,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    Loading
   },
   created () {
     this.touch = {};
@@ -58,12 +67,19 @@ export default {
   data () {
     return {
       scrollY: -1,
-      currentIndex: 0
+      currentIndex: 0,
+      diff: -1
     }
   },
   computed: {
     shortcutList () {
       return this.data.map((group) => group.title.substr(0, 1))
+    },
+    fixedTitle () {
+      if (this.scrollY > 0) {
+        return '';
+      }
+      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : '';
     }
   },
   methods: {
@@ -119,12 +135,20 @@ export default {
         let height2 = listHeight[i + 1];
         if (-newY >= height1 && -newY < height2) {
           this.currentIndex = i;
-          console.log(this.currentIndex)
+          this.diff = height2 + newY;
           return;
         }
       }
       // 滚动到底部
-      this.currentIndex = listHeight.length - 2
+      this.currentIndex = listHeight.length - 2;
+    },
+    diff(newVal) {
+      let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0;
+      if (this.fixedTop === fixedTop) {
+        return;
+      }
+      this.fixedTop = fixedTop;
+      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`;
     }
   }
 }
@@ -179,4 +203,22 @@ export default {
       font-size $font-size-small
       &.current
         color $color-theme
+  .list-fixed
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 30px
+    .fixed-title
+      height 30px
+      line-height 30px
+      padding-left 20px
+      font-size $font-size-small
+      color $color-text-l
+      background $color-highlight-background
+  .loading-container
+    position absolute
+    width 100%
+    top 50%
+    transform translateY(-50%)
 </style>
