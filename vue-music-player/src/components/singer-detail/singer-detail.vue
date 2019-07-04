@@ -8,12 +8,17 @@
 import {mapGetters} from 'vuex'
 import {getSingerDetail} from 'api/singer'
 import {ERR_OK} from 'api/config'
+import {createSong} from 'common/js/song'
+import {handleSongUrl} from 'api/song'
 
 export default {
+  data () {
+    return {
+      songs: []
+    }
+  },
   computed: {
-    ...mapGetters([
-      'singer'
-    ])
+    ...mapGetters(['singer'])
   },
   created () {
     this._getDetail();
@@ -21,14 +26,22 @@ export default {
   methods: {
     _getDetail () {
       if (!this.singer.id) {
-        this.$router.push('/singer/');
-        return;
+        this.$router.push('/singer');
       }
       getSingerDetail(this.singer.id).then((res) => {
         if (res.code === ERR_OK) {
-          console.log(res.data.list);
+          handleSongUrl(this._normalizeSongs(res.data.list)).then(songs => {
+            console.log(songs);
+          });
         }
       })
+    },
+    _normalizeSongs (list) {
+      let ret = [];
+      list.forEach((item) => {
+        ret.push(createSong(item.musicData));
+      });
+      return ret;
     }
   }
 }
