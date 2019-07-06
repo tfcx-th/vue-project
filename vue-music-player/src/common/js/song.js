@@ -24,8 +24,6 @@ export function createSong(musicData) {
   })
 }
 
-// http://117.34.59.18/amobile.music.tc.qq.com/C400003iHc0e2UIgMC.m4a?guid=362356740&vkey=F4262B250395ABCB04D8673A8190C17207247D6048439B2802197A17357A5B468FC6B9A3C42CB737D520AE8A3E175DB4C1D09A04A7450A28&uin=0&fromtag=66
-
 function filterSinger(singer) {
   let ret = [];
   if (!singer) return '';
