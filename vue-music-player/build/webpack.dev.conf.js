@@ -9,15 +9,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
-// const express = require('express')
 const axios = require('axios')
 const bodyParser = require('body-parser')
-
-// const app = express()
-// var apiRoutes = express.Router()
-
-// app.use('/api', apiRoutes)
-
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -64,7 +57,30 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       })
-      
+
+      // 歌词获取
+      app.get('/api/lyric', function(req, res) {
+        const url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg';
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          let ret = response.data;
+          if (typeof ret === 'string') {
+            let reg = /^\w+\(({[^()]+})\)$/;
+            let matches = ret.match(reg);
+            if (matches) {
+              ret = JSON.parse(matches[1]);
+            }
+          }
+          res.json(ret);
+        }).catch((err) => {
+          console.log(err);
+        })
+      })
     },
     clientLogLevel: 'warning',
     historyApiFallback: {
