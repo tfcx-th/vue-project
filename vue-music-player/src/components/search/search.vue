@@ -90,4 +90,9 @@ export default {
           background $color-highlight-background
           font-size $font-size-medium
           color $color-text-d
+  .search-result
+    position fixed
+    width 100%
+    top 178px
+    bottom 0
 </style>
