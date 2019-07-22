@@ -26,6 +26,45 @@ export const randomPlay = function ({commit}, {list}) {
   commit(types.SET_PLAYING_STATE, true);
 }
 
+export const insertSong = function ({commit, state}, song) {
+  let playlist = state.playlist.slice();
+  let sequenceList = state.sequenceList.slice();
+  let currentIndex = state.currentIndex;
+  // 记录当前歌曲
+  let currentSong = playlist[currentIndex];
+  // 查找当前列表中是否有待插入的歌曲并返回其索引
+  let findPlaylistIndex = findIndex(playlist, song);
+  // 插入歌曲，索引加1
+  currentIndex++;
+  playlist.splice(currentIndex, 0, song);
+  // 已包含就删除
+  if (findPlaylistIndex > -1) {
+    if (currentIndex > findPlaylistIndex) {
+      playlist.splice(findPlaylistIndex, 1);
+      currentIndex--;
+    } else {
+      playlist.splice(findPlaylistIndex + 1, 1);
+    }
+  }
+
+  let currentSequenceIndex = findIndex(sequenceList, currentSong) + 1;
+  let findSequenceIndex = findIndex(sequenceList, song);
+  sequenceList.splice(currentSequenceIndex, 0, song);
+  if (findSequenceIndex > -1) {
+    if (currentSequenceIndex > findSequenceIndex) {
+      sequenceList.splice(findSequenceIndex, 1);
+    } else {
+      sequenceList.splice(findSequenceIndex + 1, 1);
+    }
+  }
+
+  commit(types.SET_PLAYLIST, playlist);
+  commit(types.SET_SEQUENCE_LIST, sequenceList);
+  commit(types.SET_CURRENT_INDEX, currentIndex);
+  commit(types.SET_FULL_SCREEN, true);
+  commit(types.SET_PLAYING_STATE, true);
+}
+
 function findIndex(list, song) {
   return list.findIndex(item => {
     return item.id === song.id;

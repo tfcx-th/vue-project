@@ -28,6 +28,10 @@ export default {
     pullup: {
       type: Boolean,
       default: false
+    },
+    beforeScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted () {
@@ -46,32 +50,37 @@ export default {
       })
       if (this.listenScroll) {
         let self = this;
-        this.scroll.on('scroll', (position) => {
-          self.$emit('scroll', position)
-        })
+        this.scroll.on('scroll', position => {
+          self.$emit('scroll', position);
+        });
       }
       if (this.pullup) {
         this.scroll.on('scrollEnd', () => {
           if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
             this.$emit('scrollToEnd');
           }
-        })
+        });
+      }
+      if (this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll');
+        });
       }
     },
     enable () {
-      this.scroll && this.scroll.enable()
+      this.scroll && this.scroll.enable();
     },
     disable () {
-      this.scroll && this.scroll.disable()
+      this.scroll && this.scroll.disable();
     },
     refresh () {
-      this.scroll && this.scroll.refresh()
+      this.scroll && this.scroll.refresh();
     },
     scrollTo () {
-      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments);
     },
     scrollToElement () {
-      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments);
     }
   },
   watch: {

@@ -9,6 +9,7 @@ import MusicList from 'components/music-list/music-list';
 import {mapGetters} from 'vuex';
 import {getSongList} from 'api/recommend';
 import {ERR_OK} from 'api/config';
+import {handleSongUrl} from 'api/song';
 import {createSong} from 'common/js/song';
 
 export default {
@@ -41,9 +42,11 @@ export default {
       }
       getSongList(this.disc.dissid).then((res) => {
         if (res.code === ERR_OK) {
-          this.songs = this._normalizeSongs(res.cdlist[0].songlist);
+          handleSongUrl(this._normalizeSongs(res.cdlist[0].songlist)).then(songs => {
+            this.songs = songs;
+          });
         }
-      })
+      });
     },
     _normalizeSongs (list) {
       let ret = [];
