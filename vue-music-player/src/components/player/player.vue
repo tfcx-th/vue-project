@@ -315,6 +315,9 @@ export default {
     },
     getLyric () {
       this.currentSong.getLyric().then(lyric => {
+        if (this.currentSong.lyric !== lyric) {
+          return;
+        }
         this.currentLyric = new Lyric(lyric, this.handleLyric);
         if (this.playing) {
           this.currentLyric.play();
@@ -417,10 +420,15 @@ export default {
   },
   watch: {
     currentSong (newSong, oldSong) {
+      if (!newSong.id) return;
       if (newSong.id === oldSong.id) return;
       if (this.currentLyric) {
         this.currentLyric.stop();
+        this.currentTime = 0;
+        this.playingLyric = '';
+        this.currentLineNum = 0;
       }
+      clearTimeout(this.timer)
       setTimeout(() => {
         this.$refs.audio.play();
         this.getLyric();
