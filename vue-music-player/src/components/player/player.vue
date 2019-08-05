@@ -107,15 +107,16 @@ import {prefixStyle} from 'common/js/dom';
 import ProgressBar from 'base/progress-bar/progress-bar';
 import ProgressCircle from 'base/progress-circle/progress-circle';
 import {playMode} from 'common/js/config';
-import {shuffle} from 'common/js/util';
 import Lyric from 'lyric-parser';
 import Scroll from 'base/scroll/scroll';
 import Playlist from 'components/playlist/playlist';
+import {playerMixin} from 'common/js/mixin';
 
 const transform = prefixStyle('transform');
 const transitionDuration = prefixStyle('transitionDuration');
 
 export default {
+  mixins: [ playerMixin ],
   components: {
     ProgressBar,
     ProgressCircle,
@@ -139,23 +140,6 @@ export default {
     playIcon () {
       return this.playing ? 'icon-pause' : 'icon-play';
     },
-    iconMode () {
-      let ret = '';
-      switch (this.mode) {
-        case playMode.sequence:
-          ret = 'icon-sequence';
-          break;
-        case playMode.loop:
-          ret = 'icon-loop';
-          break;
-        case playMode.random:
-          ret = 'icon-random';
-          break;
-        default:
-          break;
-      }
-      return ret;
-    },
     miniIcon () {
       return this.playing ? 'icon-pause-mini' : 'icon-play-mini';
     },
@@ -167,12 +151,8 @@ export default {
     },
     ...mapGetters([
       'fullScreen',
-      'playlist',
-      'currentSong',
       'playing',
-      'currentIndex',
-      'mode',
-      'sequenceList'
+      'currentIndex'
     ])
   },
   created () {
@@ -287,18 +267,6 @@ export default {
         this.currentLyric.seek(currentTime * 1000);
       }
     },
-    changeMode () {
-      let mode = (this.mode + 1) % 3;
-      this.setPlayMode(mode);
-      let list = null;
-      if (mode === playMode.random) {
-        list = shuffle(this.sequenceList);
-      } else {
-        list = this.sequenceList;
-      }
-      this._resetCurrentIndex(list)
-      this.setPlayList(list);
-    },
     end () {
       if (this.mode === playMode.loop) {
         this.loop();
@@ -388,12 +356,6 @@ export default {
     showPlaylist () {
       this.$refs.playlist.show();
     },
-    _resetCurrentIndex (list) {
-      let index = list.findIndex((item) => {
-        return item.id === this.currentSong.id;
-      });
-      this.setCurrentIndex(index);
-    },
     _getPosAndScale () {
       const targetWidth = 40;
       const paddingLeft = 40;
@@ -411,11 +373,7 @@ export default {
       }
     },
     ...mapMutations({
-      setFullScreen: 'SET_FULL_SCREEN',
-      setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_PLAY_MODE',
-      setPlayList: 'SET_PLAYLIST'
+      setFullScreen: 'SET_FULL_SCREEN'
     })
   },
   watch: {
