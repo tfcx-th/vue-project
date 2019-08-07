@@ -8,7 +8,8 @@
         </div>
       </div>
       <div class="search-box-wrapper">
-        <search-box placeholder="搜索歌曲"
+        <search-box ref="searchBox"
+                    placeholder="搜索歌曲"
                     @query="onQueryChange"></search-box>
       </div>
       <div class="shortcut" v-show="!query">
@@ -17,10 +18,23 @@
                   @switch="switchItem"></switches>
         <div class="list-wrapper">
           <scroll class="list-scroll"
+                  ref="songList"
                   v-if="currentIndex===0"
-                  :data="playHistory">
+                  :data="playHistory"
+                  :refreshDelay="refreshDelay">
             <div class="list-inner">
               <song-list :songs="playHistory" @select="selectSong"></song-list>
+            </div>
+          </scroll>
+          <scroll class="list-scroll"
+                  ref="searchList"
+                  v-if="currentIndex===1"
+                  :data="searchHistory"
+                  :refreshDelay="refreshDelay">
+            <div class="list-inner">
+              <search-list @delete="deleteSearchHistory"
+                           @select="addQuery"
+                           :searches="searchHistory"></search-list>
             </div>
           </scroll>
         </div>
@@ -31,6 +45,12 @@
                  @select="selectSuggest"
                  @listScroll="blurInput"></suggest>
       </div>
+      <top-tip ref="topTip">
+        <div class="tip-title">
+          <i class="icon-ok"></i>
+          <span class="text">1首歌曲已经添加到播放队列</span>
+        </div>
+      </top-tip>
     </div>
   </transition>
 </template>
@@ -44,6 +64,8 @@ import Scroll from 'base/scroll/scroll';
 import {mapGetters, mapActions} from 'vuex';
 import SongList from 'base/song-list/song-list';
 import {Song} from 'common/js/song';
+import SearchList from 'base/search-list/search-list';
+import TopTip from 'base/top-tip/top-tip';
 
 export default {
   mixins: [
@@ -54,7 +76,9 @@ export default {
     Suggest,
     Switches,
     Scroll,
-    SongList
+    SongList,
+    SearchList,
+    TopTip
   },
   data () {
     return {
@@ -75,12 +99,20 @@ export default {
   methods: {
     show () {
       this.showFlag = true;
+      setTimeout(() => {
+        if (this.currentIndex === 0) {
+          this.$refs.songList.refresh();
+        } else {
+          this.$refs.searchList.refresh();
+        }
+      }, 20);
     },
     hide () {
       this.showFlag = false;
     },
     selectSuggest () {
       this.saveSearch();
+      this.showTip();
     },
     switchItem (index) {
       this.currentIndex = index;
@@ -88,7 +120,11 @@ export default {
     selectSong (song, index) {
       if (index !== 0) {
         this.insertSong(new Song(song));
+        this.showTip();
       }
+    },
+    showTip () {
+      this.$refs.topTip.show()
     },
     ...mapActions([
       'insertSong'
@@ -148,4 +184,15 @@ export default {
     top 124px
     bottom 0
     width 100%
+  .tip-title
+    text-align center
+    padding 18px 0
+    font-size 0
+    .icon-ok
+      font-size $font-size-medium
+      color $color-theme
+      margin-right 4px
+    .text
+      font-size $font-size-medium
+      color $color-text
 </style>
