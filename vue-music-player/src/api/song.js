@@ -2,7 +2,7 @@ import {commonParams, ERR_OK} from 'api/config';
 import axios from 'axios';
 import {getUid} from 'common/js/uid';
 
-const debug = process.env.NODE_ENV !== 'production';
+// const debug = process.env.NODE_ENV !== 'production';
 
 export function handleSongUrl(songs) {
   if (!songs.length) {
@@ -21,7 +21,7 @@ export function handleSongUrl(songs) {
 };
 
 function getSongUrl(songs) {
-  const url = debug ? '/api/getPurlUrl' : 'http://ustbhuangyi.com/music/api/getPurlUrl';
+  const url = '/api/getPurlUrl';
 
   let mids = [];
   let types = [];

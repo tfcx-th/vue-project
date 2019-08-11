@@ -15,7 +15,7 @@ export function getRecommend() {
 }
 
 export function getRecommendList() {
-  const url = '/api/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
+  const url = '/api/getRecommendList';
 
   const data = Object.assign({}, commonParams, {
     platform: 'yqq.json',
