@@ -13,7 +13,7 @@
     "eslint": "^6.5.1",
     "eslint-plugin-vue": "^5.2.3",
     "stylus": "^0.54.7",
-    "stylus-loader": "^3.0.2",
-    "webpack": "^4.41.2"
+    "stylus-loader": "^7.1.0",
+    "webpack": "^5.75.0"
   }
 }
